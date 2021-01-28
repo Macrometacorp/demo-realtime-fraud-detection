@@ -2,8 +2,7 @@
 Tutorial for Realtime Fraud Detection using Graphs, Query Workers & Stream Workers.
 
 
-# Credit Card Fraud
-
+## Setup
 
 | **Federation** | **Email** | **Passsword** |
 |------------|----------|--------------|
