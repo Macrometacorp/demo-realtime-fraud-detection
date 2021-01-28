@@ -12,7 +12,7 @@ Tutorial for Realtime Fraud Detection using Graphs & CEP.
 
 ## Sample Dataset
 
-### Create Customers
+### Customers
 
 ```
 let cust = [
@@ -32,7 +32,7 @@ for customer in cust
     insert customer in customers
 
 ```
-### Create Merchants
+### Merchants
 
 ```
 LET m = [
@@ -58,7 +58,7 @@ FOR merchant IN m
   
 ```
 
-### Create Transactions (Edges)
+### Transactions (Edges)
 
 ```
 LET e = [
