@@ -150,11 +150,11 @@ REMOVE txn IN txns RETURN OLD
 
 define trigger TxnTrigger at every 1 seconds;
 
-@sink(type='restql-call',restql.name="select_remove_txns",sink.id="txn-gen", ignore.params = "true")
+@sink(type='restql-call', restql.name="select_remove_txns", sink.id="txn-gen", ignore.params="true")
 define stream restqlStream(value long);
 
 -- json or passthrough
-@source(type='restql-call-response',sink.id="txn-gen", @map(type="json"))
+@source(type='restql-call-response', sink.id="txn-gen", @map(type="json"))
 define stream restqlStreamResponse(_from string, _to string, amount int, status string, time string);
 
 @sink(type='c8streams', stream="txns_stream", replication.type="global")
@@ -173,8 +173,33 @@ insert into txns_stream;
 ### txn-processor
 This stream worker processes incoming transactions and populates two edge collections (`txns_disputed` and `txns_undisputed`) based on the transaction type.
 
-Worker Code:
+#### Worker Code:
 ```
+@App:name("txn-processor")
+@App:description("This stream worker processes incoming transactions and populates two edge collections (txns_disputed and txns_undisputed)")
+
+@source(type='c8streams', stream.list="txns_stream", replication.type="global", @map(type='json'))
+define stream txns_stream(_from string, _to string, amount int, status string, time string);
+
+@store(type='c8db', collection="txns_disputed", replication.type="global", @map(type='json'))
+define table txns_disputed(_from string, _to string, amount int, status string, time string);
+
+@store(type='c8db', collection="txns_undisputed", replication.type="global", @map(type='json'))
+define table txns_undisputed(_from string, _to string, amount int, status string, time string);
+
+@store(type='c8db', collection="txns_undisputed", replication.type="global", @map(type='json'))
+define table txns_undisputed(_from string, _to string, amount int, status string, time string);
+
+@store(type='c8db', collection="txns_test", replication.type="global", @map(type='json'))
+define table txns_test(_from string, _to string, amount int, status string, time string);
+
+select _from, _to, amount, status, time 
+  from txns_stream[status == "Disputed"]
+insert into txns_disputed;
+
+select _from, _to, amount, status, time
+  from txns_stream[status == "Undisputed"]
+insert into txns_undisputed;
 ```
 
 ### fraud-detector
