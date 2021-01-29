@@ -137,9 +137,36 @@ FOR txn IN e
 
 This stream app send 5 transactions per second continually and repeats. Sample transactions are available in `dataset` section.
 
-Worker Code:
+#### Query `sale_remove_txns`
+```
+FOR txn IN txns LIMIT 5
+REMOVE txn IN txns RETURN OLD
 ```
 
+#### Worker Code:
+```
+@App:name("txn-generator")
+@App:description("This worker generates transactions on the base of data set")
+
+define trigger TxnTrigger at every 1 seconds;
+
+@sink(type='restql-call',restql.name="select_remove_txns",sink.id="txn-gen", ignore.params = "true")
+define stream restqlStream(value long);
+
+-- json or passthrough
+@source(type='restql-call-response',sink.id="txn-gen", @map(type="json"))
+define stream restqlStreamResponse(_from string, _to string, amount int, status string, time string);
+
+@sink(type='c8streams', stream="txns_stream", replication.type="global")
+define stream txns_stream(_from string, _to string, amount int, status string, time string);
+
+select  eventTimestamp() as value
+  from TxnTrigger
+insert into restqlStream;
+
+select _from, _to, amount, status, time
+  from restqlStreamResponse
+insert into txns_stream;
 ```
 
 
