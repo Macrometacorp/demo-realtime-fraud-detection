@@ -187,12 +187,6 @@ define table txns_disputed(_from string, _to string, amount int, status string, 
 @store(type='c8db', collection="txns_undisputed", replication.type="global", @map(type='json'))
 define table txns_undisputed(_from string, _to string, amount int, status string, time string);
 
-@store(type='c8db', collection="txns_undisputed", replication.type="global", @map(type='json'))
-define table txns_undisputed(_from string, _to string, amount int, status string, time string);
-
-@store(type='c8db', collection="txns_test", replication.type="global", @map(type='json'))
-define table txns_test(_from string, _to string, amount int, status string, time string);
-
 select _from, _to, amount, status, time 
   from txns_stream[status == "Disputed"]
 insert into txns_disputed;
