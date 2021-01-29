@@ -151,7 +151,14 @@ Worker Code:
 ```
 
 ### fraud-detector
-This stream worker call `fraud_detection` query worker (aka restql) to detect fraud and write results to `culpable-merchants` collection. document format: `{ `date`, `merchant`}`
+This stream worker call `fraud_detection` query worker (aka restql) to detect fraud and write results to `culpable-merchants` collection. 
+document format: 
+```
+{ 
+  "date": "YYYY-MM-DD HH:mm:SS
+  "merchant": "xxxxx"
+}
+```
 
 Worker Code:
 ```
