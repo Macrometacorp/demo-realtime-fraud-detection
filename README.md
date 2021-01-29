@@ -135,7 +135,7 @@ FOR txn IN e
 
 ### txn-generator
 
-This stream app send 3 transactions per second continually and repeats. Sample transactions are available in `dataset` section.
+This stream app send 5 transactions per second continually and repeats. Sample transactions are available in `dataset` section.
 
 Worker Code:
 ```
@@ -162,7 +162,7 @@ Worker Code:
 
 Zero in on `culpable merchant`.
 
-fraud_detection:
+**fraud_detection**:
 
 ```js
     // NOTE: Query to be fixed.
