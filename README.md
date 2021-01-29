@@ -206,8 +206,31 @@ document format:
 }
 ```
 
-Worker Code:
+#### Worker Code:
 ```
+@App:name("fraud_detection")
+@App:description("This stream worker call fraud_detection query worker (aka restql) to detect fraud")
+
+@source(type='c8db', collection="txns_disputed", replication.type="global", @map(type='json'))
+define stream txns_disputed(_from string, _to string, amount int, status string, time string);
+
+@sink(type='restql-call',restql.name="fraud_detection",sink.id="txn-fraud", ignore.params = "true")
+define stream restqlStream(value long);
+
+-- json or passthrough
+@source(type='restql-call-response',sink.id="txn-fraud", @map(type="json"))
+define stream restqlStreamResponse(merchant string);
+
+@store(type='c8db', collection="culpable_merchants", replication.type="global", @map(type='json'))
+define table culpable_merchants(merchant string, time string);
+
+select eventTimestamp() as value
+  from txns_disputed
+insert into restqlStream;
+
+select merchant, time:currentTime() as time
+  from restqlStreamResponse
+insert into culpable_merchants;
 ```
 
 
