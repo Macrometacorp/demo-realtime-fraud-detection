@@ -60,74 +60,459 @@ FOR merchant IN m
 ### Transactions (Edges)
 
 ```
-LET e = [
-	{"_from": "customers/Paul", "_to": "merchants/Just_Brew_It", "amount": 986, "status": "Undisputed", "time":"4/17/2014"},
-	{"_from": "customers/Paul", "_to": "merchants/Starbucks", "amount": 239, "status": "Undisputed", "time":"5/15/2014"},
-	{"_from": "customers/Paul", "_to": "merchants/Sears", "amount": 475, "status": "Undisputed", "time":"3/28/2014"},
-	{"_from": "customers/Paul", "_to": "merchants/Walmart", "amount": 654, "status": "Undisputed", "time":"3/20/2014"},
-	{"_from": "customers/Jean", "_to": "merchants/Soccer_for_the_City", "amount": 196, "status": "Undisputed", "time":"7/24/2014"},
-	{"_from": "customers/Jean", "_to": "merchants/Abercrombie", "amount": 502, "status": "Undisputed", "time":"4/9/2014"},
-	{"_from": "customers/Jean", "_to": "merchants/Walmart", "amount": 848, "status": "Undisputed", "time":"5/29/2014"},
-	{"_from": "customers/Jean", "_to": "merchants/Amazon", "amount": 802, "status": "Undisputed", "time":"3/11/2014"},
-	{"_from": "customers/Jean", "_to": "merchants/Subway", "amount": 203, "status": "Undisputed", "time":"3/27/2014"},
-	{"_from": "customers/Dan", "_to": "merchants/McDonalds", "amount": 35, "status": "Undisputed", "time":"1/23/2014"},
-	{"_from": "customers/Dan", "_to": "merchants/McDonalds", "amount": 605, "status": "Undisputed", "time":"1/27/2014"},
-	{"_from": "customers/Dan", "_to": "merchants/Soccer_for_the_City", "amount": 62, "status": "Undisputed", "time":"9/17/2014"},
-	{"_from": "customers/Dan", "_to": "merchants/Amazon", "amount": 141, "status": "Undisputed", "time":"11/14/2014"},
-	{"_from": "customers/Marc", "_to": "merchants/Amazon", "amount": 134, "status": "Undisputed", "time":"4/14/2014"},
-	{"_from": "customers/Marc", "_to": "merchants/American_Apparel", "amount": 336, "status": "Undisputed", "time":"4/3/2014"},
-	{"_from": "customers/Marc", "_to": "merchants/Walmart", "amount": 964, "status": "Undisputed", "time":"3/22/2014"},
-	{"_from": "customers/Marc", "_to": "merchants/Sears", "amount": 430, "status": "Undisputed", "time":"8/10/2014"},
-	{"_from": "customers/Marc", "_to": "merchants/Soccer_for_the_City", "amount": 11, "status": "Undisputed", "time":"9/4/2014"},
-	{"_from": "customers/John", "_to": "merchants/Soccer_for_the_City", "amount": 545, "status": "Undisputed", "time":"10/6/2014"},
-	{"_from": "customers/John", "_to": "merchants/Sprint", "amount": 457, "status": "Undisputed", "time":"10/15/2014"},
-	{"_from": "customers/John", "_to": "merchants/Justice", "amount": 468, "status": "Undisputed", "time":"7/29/2014"},
-	{"_from": "customers/John", "_to": "merchants/American_Apparel", "amount": 768, "status": "Undisputed", "time":"11/28/2014"},
-	{"_from": "customers/John", "_to": "merchants/Just_Brew_It", "amount": 921, "status": "Undisputed", "time":"3/12/2014"},
-	{"_from": "customers/Zoey", "_to": "merchants/McDonalds", "amount": 740, "status": "Undisputed", "time":"12/15/2014"},
-	{"_from": "customers/Zoey", "_to": "merchants/Abercrombie", "amount": 510, "status": "Undisputed", "time":"11/27/2014"},
-	{"_from": "customers/Zoey", "_to": "merchants/Just_Brew_It", "amount": 414, "status": "Undisputed", "time":"1/20/2014"},
-	{"_from": "customers/Zoey", "_to": "merchants/Amazon", "amount": 721, "status": "Undisputed", "time":"7/17/2014"},
-	{"_from": "customers/Zoey", "_to": "merchants/Subway", "amount": 353, "status": "Undisputed", "time":"10/25/2014"},
-	{"_from": "customers/Ava", "_to": "merchants/Sears", "amount": 681, "status": "Undisputed", "time":"12/28/2014"},
-	{"_from": "customers/Ava", "_to": "merchants/Walmart", "amount": 87, "status": "Undisputed", "time":"2/19/2014"},
-	{"_from": "customers/Ava", "_to": "merchants/American_Apparel", "amount": 533, "status": "Undisputed", "time":"8/6/2014"},
-	{"_from": "customers/Ava", "_to": "merchants/American_Apparel", "amount": 723, "status": "Undisputed", "time":"1/8/2014"},
-	{"_from": "customers/Ava", "_to": "merchants/Just_Brew_It", "amount": 627, "status": "Undisputed", "time":"5/20/2014"},
-	{"_from": "customers/Olivia", "_to": "merchants/Soccer_for_the_City", "amount": 75, "status": "Undisputed", "time":"9/4/2014"},
-	{"_from": "customers/Olivia", "_to": "merchants/Walmart", "amount": 231, "status": "Undisputed", "time":"7/12/2014"},
-	{"_from": "customers/Olivia", "_to": "merchants/Soccer_for_the_City", "amount": 924, "status": "Undisputed", "time":"10/4/2014"},
-	{"_from": "customers/Olivia", "_to": "merchants/Just_Brew_It", "amount": 742, "status": "Undisputed", "time":"8/12/2014"},
-	{"_from": "customers/Mia", "_to": "merchants/Soccer_for_the_City", "amount": 276, "status": "Undisputed", "time":"12/24/2014"},
-	{"_from": "customers/Mia", "_to": "merchants/Starbucks", "amount": 66, "status": "Undisputed", "time":"4/16/2014"},
-	{"_from": "customers/Mia", "_to": "merchants/McDonalds", "amount": 467, "status": "Undisputed", "time":"12/23/2014"},
-	{"_from": "customers/Mia", "_to": "merchants/Sears", "amount": 830, "status": "Undisputed", "time":"3/13/2014"},
-	{"_from": "customers/Mia", "_to": "merchants/Amazon", "amount": 240, "status": "Undisputed", "time":"7/09/2014"},
-	{"_from": "customers/Mia", "_to": "merchants/Soccer_for_the_City", "amount": 164, "status": "Undisputed", "time":"12/26/2014"},
-	{"_from": "customers/Madison", "_to": "merchants/McDonalds", "amount": 630, "status": "Undisputed", "time":"10/6/2014"},
-	{"_from": "customers/Madison", "_to": "merchants/Abercrombie", "amount": 19, "status": "Undisputed", "time":"7/29/2014"},
-	{"_from": "customers/Madison", "_to": "merchants/Subway", "amount": 352, "status": "Undisputed", "time":"12/16/2014"},
-	{"_from": "customers/Madison", "_to": "merchants/Amazon", "amount": 147, "status": "Undisputed", "time":"8/3/2014"},
-	{"_from": "customers/Madison", "_to": "merchants/Walmart", "amount": 91, "status": "Undisputed", "time":"6/29/2014"},
-	{"_from": "customers/Paul", "_to": "merchants/Apple_Store", "amount": 1021, "status": "Disputed", "time":"7/18/2014"},
-	{"_from": "customers/Paul", "_to": "merchants/Urban_Outfitters", "amount": 1732, "status": "Disputed", "time":"5/10/2014"},
-	{"_from": "customers/Paul", "_to": "merchants/RadioShack", "amount": 1415, "status": "Disputed", "time":"4/1/2014"},
-	{"_from": "customers/Paul", "_to": "merchants/Macys", "amount": 1849, "status": "Disputed", "time":"12/20/2014"},
-	{"_from": "customers/Marc", "_to": "merchants/Apple_Store", "amount": 1914, "status": "Disputed", "time":"7/18/2014"},
-	{"_from": "customers/Marc", "_to": "merchants/Urban_Outfitters", "amount": 1424, "status": "Disputed", "time":"5/10/2014"},
-	{"_from": "customers/Marc", "_to": "merchants/RadioShack", "amount": 1721, "status": "Disputed", "time":"4/1/2014"},
-	{"_from": "customers/Marc", "_to": "merchants/Macys", "amount": 1003, "status": "Disputed", "time":"12/20/2014"},
-	{"_from": "customers/Olivia", "_to": "merchants/Apple_Store", "amount": 1149, "status": "Disputed", "time":"7/18/2014"},
-	{"_from": "customers/Olivia", "_to": "merchants/Urban_Outfitters", "amount": 1152, "status": "Disputed", "time":"5/10/2014"},
-	{"_from": "customers/Olivia", "_to": "merchants/RadioShack", "amount": 1984, "status": "Disputed", "time":"4/1/2014"},
-	{"_from": "customers/Olivia", "_to": "merchants/Macys", "amount": 1790, "status": "Disputed", "time":"12/20/2014"},
-	{"_from": "customers/Madison", "_to": "merchants/Apple_Store", "amount": 1923, "status": "Disputed", "time":"7/18/2014"},
-	{"_from": "customers/Madison", "_to": "merchants/Urban_Outfitters", "amount": 1375, "status": "Disputed", "time":"5/10/2014"},
-	{"_from": "customers/Madison", "_to": "merchants/RadioShack", "amount": 1369, "status": "Disputed", "time":"4/1/2014"},
-	{"_from": "customers/Madison", "_to": "merchants/Macys", "amount": 1816, "status": "Disputed", "time":"12/20/2014"}
+LET transactionsData =[
+  {
+    "_from": "customers/Paul",
+    "_to": "merchants/Just_Brew_It",
+    "amount": 295,
+    "status": "Undisputed",
+    "time": "02/01/2021 23:02:15"
+  },
+  {
+    "_from": "customers/Paul",
+    "_to": "merchants/Starbucks",
+    "amount": 288,
+    "status": "Undisputed",
+    "time": "10/08/2020 04:07:20"
+  },
+  {
+    "_from": "customers/Paul",
+    "_to": "merchants/Sears",
+    "amount": 706,
+    "status": "Undisputed",
+    "time": "10/15/2020 18:19:10"
+  },
+  {
+    "_from": "customers/Paul",
+    "_to": "merchants/Walmart",
+    "amount": 731,
+    "status": "Undisputed",
+    "time": "12/21/2020 17:43:36"
+  },
+  {
+    "_from": "customers/Jean",
+    "_to": "merchants/Soccer_for_the_City",
+    "amount": 317,
+    "status": "Undisputed",
+    "time": "10/17/2020 19:18:39"
+  },
+  {
+    "_from": "customers/Jean",
+    "_to": "merchants/Abercrombie",
+    "amount": 254,
+    "status": "Undisputed",
+    "time": "11/17/2020 22:39:11"
+  },
+  {
+    "_from": "customers/Jean",
+    "_to": "merchants/Walmart",
+    "amount": 482,
+    "status": "Undisputed",
+    "time": "11/06/2020 03:15:00"
+  },
+  {
+    "_from": "customers/Jean",
+    "_to": "merchants/Amazon",
+    "amount": 215,
+    "status": "Undisputed",
+    "time": "01/18/2021 15:44:34"
+  },
+  {
+    "_from": "customers/Jean",
+    "_to": "merchants/Subway",
+    "amount": 447,
+    "status": "Undisputed",
+    "time": "01/11/2021 08:39:22"
+  },
+  {
+    "_from": "customers/Dan",
+    "_to": "merchants/McDonalds",
+    "amount": 949,
+    "status": "Undisputed",
+    "time": "10/28/2020 10:46:41"
+  },
+  {
+    "_from": "customers/Dan",
+    "_to": "merchants/McDonalds",
+    "amount": 899,
+    "status": "Undisputed",
+    "time": "10/23/2020 10:46:59"
+  },
+  {
+    "_from": "customers/Dan",
+    "_to": "merchants/Soccer_for_the_City",
+    "amount": 398,
+    "status": "Undisputed",
+    "time": "01/22/2021 17:15:52"
+  },
+  {
+    "_from": "customers/Dan",
+    "_to": "merchants/Amazon",
+    "amount": 744,
+    "status": "Undisputed",
+    "time": "10/09/2020 13:44:09"
+  },
+  {
+    "_from": "customers/Marc",
+    "_to": "merchants/Amazon",
+    "amount": 490,
+    "status": "Undisputed",
+    "time": "11/02/2020 22:14:13"
+  },
+  {
+    "_from": "customers/Marc",
+    "_to": "merchants/American_Apparel",
+    "amount": 775,
+    "status": "Undisputed",
+    "time": "10/09/2020 04:16:34"
+  },
+  {
+    "_from": "customers/Marc",
+    "_to": "merchants/Walmart",
+    "amount": 221,
+    "status": "Undisputed",
+    "time": "12/27/2020 00:31:58"
+  },
+  {
+    "_from": "customers/Marc",
+    "_to": "merchants/Sears",
+    "amount": 316,
+    "status": "Undisputed",
+    "time": "10/25/2020 23:58:35"
+  },
+  {
+    "_from": "customers/Marc",
+    "_to": "merchants/Soccer_for_the_City",
+    "amount": 299,
+    "status": "Undisputed",
+    "time": "01/16/2021 07:49:27"
+  },
+  {
+    "_from": "customers/John",
+    "_to": "merchants/Soccer_for_the_City",
+    "amount": 721,
+    "status": "Undisputed",
+    "time": "11/05/2020 11:38:21"
+  },
+  {
+    "_from": "customers/John",
+    "_to": "merchants/Sprint",
+    "amount": 903,
+    "status": "Undisputed",
+    "time": "11/06/2020 15:45:04"
+  },
+  {
+    "_from": "customers/John",
+    "_to": "merchants/Justice",
+    "amount": 842,
+    "status": "Undisputed",
+    "time": "11/18/2020 02:01:35"
+  },
+  {
+    "_from": "customers/John",
+    "_to": "merchants/American_Apparel",
+    "amount": 73,
+    "status": "Undisputed",
+    "time": "01/19/2021 15:32:27"
+  },
+  {
+    "_from": "customers/John",
+    "_to": "merchants/Just_Brew_It",
+    "amount": 714,
+    "status": "Undisputed",
+    "time": "12/22/2020 04:30:25"
+  },
+  {
+    "_from": "customers/Zoey",
+    "_to": "merchants/McDonalds",
+    "amount": 382,
+    "status": "Undisputed",
+    "time": "01/23/2021 16:17:40"
+  },
+  {
+    "_from": "customers/Zoey",
+    "_to": "merchants/Abercrombie",
+    "amount": 600,
+    "status": "Undisputed",
+    "time": "11/01/2020 19:44:37"
+  },
+  {
+    "_from": "customers/Zoey",
+    "_to": "merchants/Just_Brew_It",
+    "amount": 697,
+    "status": "Undisputed",
+    "time": "10/23/2020 18:49:30"
+  },
+  {
+    "_from": "customers/Zoey",
+    "_to": "merchants/Amazon",
+    "amount": 421,
+    "status": "Undisputed",
+    "time": "01/11/2021 20:08:37"
+  },
+  {
+    "_from": "customers/Zoey",
+    "_to": "merchants/Subway",
+    "amount": 489,
+    "status": "Undisputed",
+    "time": "11/13/2020 07:46:39"
+  },
+  {
+    "_from": "customers/Ava",
+    "_to": "merchants/Sears",
+    "amount": 211,
+    "status": "Undisputed",
+    "time": "12/22/2020 06:38:13"
+  },
+  {
+    "_from": "customers/Ava",
+    "_to": "merchants/Walmart",
+    "amount": 51,
+    "status": "Undisputed",
+    "time": "12/15/2020 22:11:41"
+  },
+  {
+    "_from": "customers/Ava",
+    "_to": "merchants/American_Apparel",
+    "amount": 10,
+    "status": "Undisputed",
+    "time": "11/07/2020 13:10:23"
+  },
+  {
+    "_from": "customers/Ava",
+    "_to": "merchants/American_Apparel",
+    "amount": 33,
+    "status": "Undisputed",
+    "time": "10/23/2020 00:18:40"
+  },
+  {
+    "_from": "customers/Ava",
+    "_to": "merchants/Just_Brew_It",
+    "amount": 150,
+    "status": "Undisputed",
+    "time": "10/17/2020 00:04:15"
+  },
+  {
+    "_from": "customers/Olivia",
+    "_to": "merchants/Soccer_for_the_City",
+    "amount": 957,
+    "status": "Undisputed",
+    "time": "10/14/2020 00:19:17"
+  },
+  {
+    "_from": "customers/Olivia",
+    "_to": "merchants/Walmart",
+    "amount": 698,
+    "status": "Undisputed",
+    "time": "12/23/2020 10:49:48"
+  },
+  {
+    "_from": "customers/Olivia",
+    "_to": "merchants/Soccer_for_the_City",
+    "amount": 649,
+    "status": "Undisputed",
+    "time": "12/11/2020 16:58:40"
+  },
+  {
+    "_from": "customers/Olivia",
+    "_to": "merchants/Just_Brew_It",
+    "amount": 126,
+    "status": "Undisputed",
+    "time": "12/21/2020 05:22:57"
+  },
+  {
+    "_from": "customers/Mia",
+    "_to": "merchants/Soccer_for_the_City",
+    "amount": 676,
+    "status": "Undisputed",
+    "time": "01/11/2021 19:48:26"
+  },
+  {
+    "_from": "customers/Mia",
+    "_to": "merchants/Starbucks",
+    "amount": 210,
+    "status": "Undisputed",
+    "time": "11/06/2020 13:12:16"
+  },
+  {
+    "_from": "customers/Mia",
+    "_to": "merchants/McDonalds",
+    "amount": 634,
+    "status": "Undisputed",
+    "time": "01/07/2021 13:12:26"
+  },
+  {
+    "_from": "customers/Mia",
+    "_to": "merchants/Sears",
+    "amount": 292,
+    "status": "Undisputed",
+    "time": "01/23/2021 18:43:13"
+  },
+  {
+    "_from": "customers/Mia",
+    "_to": "merchants/Amazon",
+    "amount": 626,
+    "status": "Undisputed",
+    "time": "12/23/2020 17:06:25"
+  },
+  {
+    "_from": "customers/Mia",
+    "_to": "merchants/Soccer_for_the_City",
+    "amount": 146,
+    "status": "Undisputed",
+    "time": "02/07/2021 21:12:46"
+  },
+  {
+    "_from": "customers/Madison",
+    "_to": "merchants/McDonalds",
+    "amount": 846,
+    "status": "Undisputed",
+    "time": "01/30/2021 19:33:52"
+  },
+  {
+    "_from": "customers/Madison",
+    "_to": "merchants/Abercrombie",
+    "amount": 86,
+    "status": "Undisputed",
+    "time": "01/27/2021 20:02:35"
+  },
+  {
+    "_from": "customers/Madison",
+    "_to": "merchants/Subway",
+    "amount": 13,
+    "status": "Undisputed",
+    "time": "11/01/2020 21:52:46"
+  },
+  {
+    "_from": "customers/Madison",
+    "_to": "merchants/Amazon",
+    "amount": 46,
+    "status": "Undisputed",
+    "time": "10/08/2020 15:57:05"
+  },
+  {
+    "_from": "customers/Madison",
+    "_to": "merchants/Walmart",
+    "amount": 873,
+    "status": "Undisputed",
+    "time": "12/22/2020 10:09:26"
+  },
+  {
+    "_from": "customers/Paul",
+    "_to": "merchants/Apple_Store",
+    "amount": 917,
+    "status": "Disputed",
+    "time": "12/04/2020 21:21:17"
+  },
+  {
+    "_from": "customers/Paul",
+    "_to": "merchants/Urban_Outfitters",
+    "amount": 858,
+    "status": "Disputed",
+    "time": "02/02/2021 15:23:20"
+  },
+  {
+    "_from": "customers/Paul",
+    "_to": "merchants/RadioShack",
+    "amount": 470,
+    "status": "Disputed",
+    "time": "01/19/2021 07:00:53"
+  },
+  {
+    "_from": "customers/Paul",
+    "_to": "merchants/Macys",
+    "amount": 644,
+    "status": "Disputed",
+    "time": "11/07/2020 08:09:29"
+  },
+  {
+    "_from": "customers/Marc",
+    "_to": "merchants/Apple_Store",
+    "amount": 446,
+    "status": "Disputed",
+    "time": "12/29/2020 07:33:43"
+  },
+  {
+    "_from": "customers/Marc",
+    "_to": "merchants/Urban_Outfitters",
+    "amount": 225,
+    "status": "Disputed",
+    "time": "01/10/2021 22:06:13"
+  },
+  {
+    "_from": "customers/Marc",
+    "_to": "merchants/RadioShack",
+    "amount": 39,
+    "status": "Disputed",
+    "time": "11/30/2020 17:24:05"
+  },
+  {
+    "_from": "customers/Marc",
+    "_to": "merchants/Macys",
+    "amount": 928,
+    "status": "Disputed",
+    "time": "01/27/2021 16:58:42"
+  },
+  {
+    "_from": "customers/Olivia",
+    "_to": "merchants/Apple_Store",
+    "amount": 59,
+    "status": "Disputed",
+    "time": "12/01/2020 14:22:55"
+  },
+  {
+    "_from": "customers/Olivia",
+    "_to": "merchants/Urban_Outfitters",
+    "amount": 156,
+    "status": "Disputed",
+    "time": "11/06/2020 02:10:55"
+  },
+  {
+    "_from": "customers/Olivia",
+    "_to": "merchants/RadioShack",
+    "amount": 85,
+    "status": "Disputed",
+    "time": "10/28/2020 17:48:22"
+  },
+  {
+    "_from": "customers/Olivia",
+    "_to": "merchants/Macys",
+    "amount": 437,
+    "status": "Disputed",
+    "time": "11/16/2020 03:27:31"
+  },
+  {
+    "_from": "customers/Madison",
+    "_to": "merchants/Apple_Store",
+    "amount": 915,
+    "status": "Disputed",
+    "time": "12/01/2020 19:07:57"
+  },
+  {
+    "_from": "customers/Madison",
+    "_to": "merchants/Urban_Outfitters",
+    "amount": 132,
+    "status": "Disputed",
+    "time": "12/30/2020 08:04:40"
+  },
+  {
+    "_from": "customers/Madison",
+    "_to": "merchants/RadioShack",
+    "amount": 881,
+    "status": "Disputed",
+    "time": "11/27/2020 11:58:56"
+  },
+  {
+    "_from": "customers/Madison",
+    "_to": "merchants/Macys",
+    "amount": 359,
+    "status": "Disputed",
+    "time": "12/09/2020 15:01:34"
+  }
 ]
-FOR txn IN e
-	INSERT txn IN txns
+
+FOR txn IN transactionsData
+	INSERT txn IN transactions
   
 ```
 
@@ -215,20 +600,20 @@ document format:
 define stream txns_disputed(_from string, _to string, amount int, status string, time string);
 
 @sink(type='restql-call',restql.name="fraud_detection",sink.id="txn-fraud", ignore.params = "true")
-define stream restqlStream(value long);
+define stream restqlStream(time string);
 
 -- json or passthrough
-@source(type='restql-call-response',sink.id="txn-fraud", @map(type="json"))
-define stream restqlStreamResponse(merchant string);
+@source(type='restql-call-response',sink.id="txn-fraud", stream="restqlStreamResponse", @map(type="json"))
+define stream restqlStreamResponse(merchant object);
 
 @store(type='c8db', collection="culpable_merchants", replication.type="global", @map(type='json'))
-define table culpable_merchants(merchant string, time string);
+define table culpable_merchants(merchant object, time string);
 
-select eventTimestamp() as value
+select time
   from txns_disputed
 insert into restqlStream;
 
-select merchant, time:currentTime() as time
+select merchant, time:currentTimestamp() as time
   from restqlStreamResponse
 insert into culpable_merchants;
 ```
@@ -243,20 +628,19 @@ Zero in on `culpable merchant`.
 ```js
 	// Query to identify culpable merchant
 	
-	LET suspects = FLATTEN(
-	    FOR t IN txns
-		FILTER t.status == "Disputed"
-		FOR prev IN txns
-		    FILTER prev._from == t._from AND prev.time < t.time AND prev.status == "Undisputed"
-		    COLLECT customer = t._from INTO info
-		    RETURN (FOR merchant IN info[*].prev._to RETURN DISTINCT merchant)  
+LET suspects = FLATTEN(
+ FOR t IN txns_disputed
+ FILTER t.time == @time
+   FOR prev IN txns_undisputed
+	    FILTER prev._from == t._from AND prev.time < t.time
+	    COLLECT customer = t._from INTO info
+	    RETURN (FOR merchant IN info[*].prev._to RETURN DISTINCT merchant)  
 	)
-	FOR suspect IN suspects
-	    COLLECT merchant = suspect WITH COUNT INTO mentions
-	    SORT mentions DESC
-	    //RETURN MERGE(DOCUMENT(merchant), {"mentions": mentions})
-	    LIMIT 1
-	    RETURN DOCUMENT(merchant)
+ FOR suspect IN suspects
+    COLLECT merchant = suspect WITH COUNT INTO mentions
+    SORT mentions DESC
+    LIMIT 1
+    RETURN {merchant}
 ```
 
 ## Additional Notes
