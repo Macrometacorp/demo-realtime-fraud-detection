@@ -535,7 +535,8 @@ REMOVE txn IN txns RETURN OLD
 
 define trigger TxnTrigger at every 1 seconds;
 
-@sink(type='restql-call', restql.name="select_remove_txns", sink.id="txn-gen", ignore.params="true")
+--@sink(type='restql-call', restql.name="sale_remove_txns", sink.id="txn-gen", ignore.params="true")
+@sink(type='restql-call', restql.name="random_data_generator", sink.id="txn-gen", ignore.params="true")
 define stream restqlStream(value long);
 
 -- json or passthrough
@@ -544,6 +545,9 @@ define stream restqlStreamResponse(_from string, _to string, amount int, status 
 
 @sink(type='c8streams', stream="txns_stream", replication.type="global")
 define stream txns_stream(_from string, _to string, amount int, status string, time string);
+
+@store(type='c8db', collection="txns", replication.type="global")
+define table txns(_from string, _to string, amount int, status string, time string);
 
 select  eventTimestamp() as value
   from TxnTrigger
@@ -599,8 +603,8 @@ document format:
 @source(type='c8db', collection="txns_disputed", replication.type="global", @map(type='json'))
 define stream txns_disputed(_from string, _to string, amount int, status string, time string);
 
-@sink(type='restql-call',restql.name="fraud_detection",sink.id="txn-fraud", ignore.params = "true")
-define stream restqlStream(time string);
+@sink(type='restql-call',restql.name="fraud_detection",sink.id="txn-fraud", ignore.params = "false")
+define stream restqlStream(time string, customer string);
 
 -- json or passthrough
 @source(type='restql-call-response',sink.id="txn-fraud", stream="restqlStreamResponse", @map(type="json"))
@@ -609,7 +613,7 @@ define stream restqlStreamResponse(merchant object);
 @store(type='c8db', collection="culpable_merchants", replication.type="global", @map(type='json'))
 define table culpable_merchants(merchant object, time string);
 
-select time
+select time, _from as customer
   from txns_disputed
 insert into restqlStream;
 
@@ -618,6 +622,20 @@ select merchant, time:currentTimestamp() as time
 insert into culpable_merchants;
 ```
 
+## Query for random transactional data
+
+**random_data_generator**:
+
+```js
+FOR cus IN customers SORT RAND()*10/10 LIMIT 1
+  FOR mer IN merchants SORT RAND()*10/10 LIMIT 1 
+RETURN {_from : CONCAT_SEPARATOR("/", "customers", cus._key), 
+          _to :  CONCAT_SEPARATOR("/", "merchants", mer._key), 
+       amount : FLOOR((RAND() + 1) * 100), 
+       status : (FLOOR(RAND()*10)%4) == 0 ? "Disputed" : "Undisputed",
+         time : DATE_ISO8601(DATE_NOW())
+}
+```
 
 ## Query Worker
 
