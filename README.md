@@ -71,7 +71,6 @@ This stream app send 1 transactions per second continually and repeats.
 
 define trigger TxnTrigger at every 1 seconds;
 
---@sink(type='restql-call', restql.name="sale_remove_txns", sink.id="txn-gen", ignore.params="true")
 @sink(type='restql-call', restql.name="random_data_generator", sink.id="txn-gen", ignore.params="true")
 define stream restqlStream(value long);
 
