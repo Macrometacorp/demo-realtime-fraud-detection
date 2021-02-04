@@ -162,13 +162,12 @@ insert into culpable_merchants;
 **random_data_generator**:
 
 ```js
-FOR cus IN customers SORT RAND()*10/10 LIMIT 1
-  FOR mer IN merchants SORT RAND()*10/10 LIMIT 1 
-RETURN {_from : CONCAT_SEPARATOR("/", "customers", cus._key), 
-          _to :  CONCAT_SEPARATOR("/", "merchants", mer._key), 
-       amount : FLOOR((RAND() + 1) * 100), 
-       status : (FLOOR(RAND()*10)%4) == 0 ? "Disputed" : "Undisputed",
-         time : DATE_ISO8601(DATE_NOW())
+FOR i IN 1..50
+  RETURN {_from : CONCAT_SEPARATOR("/", "customers", (FOR cus IN customers SORT RAND()*10/10 LIMIT 1 RETURN cus._key)), 
+            _to : CONCAT_SEPARATOR("/", "merchants", (FOR mer IN merchants SORT RAND()*10/10 LIMIT 1 RETURN mer._key)), 
+         amount : FLOOR((RAND() + 1) * 100), 
+         status : (FLOOR(RAND()*10)%4) == 0 ? "Disputed" : "Undisputed",
+           time : DATE_ISO8601(DATE_NOW())
 }
 ```
 
