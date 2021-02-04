@@ -180,8 +180,11 @@ Zero in on `culpable merchant`.
 
 ```js
 	// Query to identify culpable merchant
+
 	LET end = @time
 	LET start = DATE_ISO8601(DATE_TIMESTAMP(@time) - 3 * 24 * 60 * 60 * 1000) // end - 3 days
+
+	// For each disputed transaction in the time period, find the time of the earliest for each customer.
 	LET customers = MERGE(
 	    FOR t IN txns_disputed
 		FILTER start < t.time AND t.time <= end
@@ -189,6 +192,8 @@ Zero in on `culpable merchant`.
 		AGGREGATE time = MIN(t.time)
 		RETURN {[customer]: time}
 	)
+	
+	// Determine the suspect merchants based on each customer's transactions.
 	LET suspects = (
 	    FOR prev IN txns_undisputed
 		FILTER HAS(customers, prev._from) AND prev.time < customers[prev._from]
@@ -197,6 +202,8 @@ Zero in on `culpable merchant`.
 		RETURN (FOR merchant IN info[*].prev._to RETURN DISTINCT merchant)
 	)
 	// LET first = suspects[0]
+
+	// Find a merchant suspected for the most customers.
 	FOR suspect IN FLATTEN(suspects)
 	    // FILTER suspect IN first
 	    COLLECT merchant = suspect WITH COUNT INTO mentions
