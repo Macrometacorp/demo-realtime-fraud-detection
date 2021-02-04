@@ -139,7 +139,7 @@ document format:
 define stream txns_disputed(_from string, _to string, amount int, status string, time string);
 
 @sink(type='restql-call',restql.name="fraud_detection",sink.id="txn-fraud", ignore.params = "false")
-define stream restqlStream(time string, customer string);
+define stream restqlStream(time string);
 
 -- json or passthrough
 @source(type='restql-call-response',sink.id="txn-fraud", stream="restqlStreamResponse", @map(type="json"))
@@ -148,7 +148,7 @@ define stream restqlStreamResponse(merchant object);
 @store(type='c8db', collection="culpable_merchants", replication.type="global", @map(type='json'))
 define table culpable_merchants(merchant object, time string);
 
-select time, _from as customer
+select time
   from txns_disputed
 insert into restqlStream;
 
