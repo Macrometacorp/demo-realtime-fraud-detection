@@ -201,5 +201,7 @@ Zero in on `culpable merchant`.
 	    // FILTER suspect IN first
 	    COLLECT merchant = suspect WITH COUNT INTO mentions
 	    SORT mentions DESC
-	    RETURN MERGE(DOCUMENT(merchant), {"mentions": mentions})
+	    // RETURN MERGE(DOCUMENT(merchant), {"mentions": mentions})
+	    LIMIT 1 
+	    RETURN {"merchant": merchant}
 ```
