@@ -180,18 +180,26 @@ Zero in on `culpable merchant`.
 
 ```js
 	// Query to identify culpable merchant
-	
-LET suspects = FLATTEN(
- FOR t IN txns_disputed
- FILTER t.time == @time
-   FOR prev IN txns_undisputed
-	    FILTER prev._from == t._from AND prev.time < t.time
-	    COLLECT customer = t._from INTO info
-	    RETURN (FOR merchant IN info[*].prev._to RETURN DISTINCT merchant)  
+	LET end = @time
+	LET start = DATE_ISO8601(DATE_TIMESTAMP(@time) - 3 * 24 * 60 * 60 * 1000) // end - 3 days
+	LET customers = MERGE(
+	    FOR t IN txns_disputed
+		FILTER start < t.time AND t.time <= end
+		COLLECT customer = t._from
+		AGGREGATE time = MIN(t.time)
+		RETURN {[customer]: time}
 	)
- FOR suspect IN suspects
-    COLLECT merchant = suspect WITH COUNT INTO mentions
-    SORT mentions DESC
-    LIMIT 1
-    RETURN {merchant}
+	LET suspects = (
+	    FOR prev IN txns_undisputed
+		FILTER HAS(customers, prev._from) AND prev.time < customers[prev._from]
+		COLLECT customer = prev._from INTO info
+		// SORT (customer == @customer) DESC
+		RETURN (FOR merchant IN info[*].prev._to RETURN DISTINCT merchant)
+	)
+	// LET first = suspects[0]
+	FOR suspect IN FLATTEN(suspects)
+	    // FILTER suspect IN first
+	    COLLECT merchant = suspect WITH COUNT INTO mentions
+	    SORT mentions DESC
+	    RETURN MERGE(DOCUMENT(merchant), {"mentions": mentions})
 ```
