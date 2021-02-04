@@ -163,8 +163,10 @@ insert into culpable_merchants;
 
 ```js
 FOR i IN 1..50
-  RETURN {_from : CONCAT_SEPARATOR("/", "customers", (FOR cus IN customers SORT RAND()*10/10 LIMIT 1 RETURN cus._key)), 
-            _to : CONCAT_SEPARATOR("/", "merchants", (FOR mer IN merchants SORT RAND()*10/10 LIMIT 1 RETURN mer._key)), 
+  LET cus = (FOR cus IN customers SORT RAND()*10/10 LIMIT 1 RETURN cus._key)
+  LET mer = (FOR mer IN merchants SORT RAND()*10/10 LIMIT 1 RETURN mer._key)
+  RETURN {_from : CONCAT_SEPARATOR("/", "customers", FIRST(cus)), 
+            _to : CONCAT_SEPARATOR("/", "merchants", FIRST(mer)), 
          amount : FLOOR((RAND() + 1) * 100), 
          status : (FLOOR(RAND()*10)%4) == 0 ? "Disputed" : "Undisputed",
            time : DATE_ISO8601(DATE_NOW())
