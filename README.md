@@ -60,6 +60,42 @@ FOR merchant IN m
 
 ## Stream Workers
 
+### customers-generator
+```
+@App:name("customers-generator")
+@App:description('Generates customer names.')
+
+define trigger genCustomerTrigger at every 1 sec;
+
+@store(type='c8db', collection='customers', replication.type="global", @map(type='json'))
+define table customers(_key string, age long, gender string, name string);
+
+select pii:fake('Name', "NAME_FIRSTNAME", true) as _key,
+       math:round(math:rand()*70 + 15) as age,
+       ifThenElse(math:round(math:rand()*10)%2 == 0, 'male', 'female') as gender,
+       pii:fake('Name', "NAME_FIRSTNAME", false) as name
+  from genCustomerTrigger
+insert into customers;
+```
+
+### merchants-generator
+```
+@App:name("merchants-generator")
+@App:description('Generates customer names.')
+
+define trigger genMerchantsTrigger at every 1 sec;
+
+@store(type='c8db', collection='merchants', replication.type="global", @map(type='json'))
+define table merchants(_key string, name string, address string, street string);
+
+select pii:fake('CompanyName', "COMPANY_NAME", true) as _key,
+       pii:fake('CompanyName', "COMPANY_NAME") as name,
+       str:concat(pii:fake('City', "ADDRESS_CITY"), ", ", pii:fake('Zipcode', "ADDRESS_ZIPCODE")) as address,
+       pii:fake('Street', "ADDRESS_STREETADDRESS") as street
+  from genMerchantsTrigger
+insert into merchants;
+```
+
 ### txn-generator
 
 This stream app send 1 transactions per second continually and repeats. 
