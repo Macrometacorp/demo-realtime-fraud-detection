@@ -63,7 +63,7 @@ FOR merchant IN m
 ### customers-generator
 ```
 @App:name("customers-generator")
-@App:description('Generates customer names.')
+@App:description('Generates customers info.')
 
 define trigger genCustomerTrigger at every 1 sec;
 
@@ -81,7 +81,7 @@ insert into customers;
 ### merchants-generator
 ```
 @App:name("merchants-generator")
-@App:description('Generates customer names.')
+@App:description('Generates merchants info.')
 
 define trigger genMerchantsTrigger at every 1 sec;
 
