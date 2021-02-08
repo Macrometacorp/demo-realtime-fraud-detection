@@ -222,30 +222,34 @@ Zero in on `culpable merchant`.
 	LET start = DATE_ISO8601(DATE_TIMESTAMP(@time) - 3 * 24 * 60 * 60 * 1000) // end - 3 days
 
 	// For each disputed transaction in the time period, find the time of the earliest for each customer.
-	LET customers = MERGE(
+	LET customers = (
 	    FOR t IN txns_disputed
 		FILTER start < t.time AND t.time <= end
 		COLLECT customer = t._from
 		AGGREGATE time = MIN(t.time)
-		RETURN {[customer]: time}
+		SORT (customer == CONCAT("customers/", @customer)) DESC
+		RETURN [customer, time]
 	)
-	
+
 	// Determine the suspect merchants based on each customer's transactions.
 	LET suspects = (
-	    FOR prev IN txns_undisputed
-		FILTER HAS(customers, prev._from) AND prev.time < customers[prev._from]
-		COLLECT customer = prev._from INTO info
-		// SORT (customer == @customer) DESC
-		RETURN (FOR merchant IN info[*].prev._to RETURN DISTINCT merchant)
+	    FOR entry IN customers
+		LET customer = entry[0]
+		LET time = entry[1]
+		RETURN (
+		    FOR prev IN txns_undisputed
+			FILTER prev._from == customer AND prev.time < time
+			RETURN DISTINCT prev._to
+		)
 	)
-	// LET first = suspects[0]
+	LET first = suspects[0] // suspects for the complaining customer
 
 	// Find a merchant suspected for the most customers.
 	FOR suspect IN FLATTEN(suspects)
-	    // FILTER suspect IN first
+	    FILTER suspect IN first
 	    COLLECT merchant = suspect WITH COUNT INTO mentions
 	    SORT mentions DESC
 	    // RETURN MERGE(DOCUMENT(merchant), {"mentions": mentions})
-	    LIMIT 1 
+	    LIMIT 1
 	    RETURN {"merchant": merchant}
 ```
