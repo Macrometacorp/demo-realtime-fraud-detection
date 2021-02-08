@@ -100,7 +100,6 @@ insert into merchants;
 
 This stream app send 1 transactions per second continually and repeats. 
 
-#### Worker Code:
 ```
 @App:name("txn-generator")
 @App:description("This worker generates transactions on the base of data set")
@@ -133,7 +132,6 @@ insert into txns_stream;
 ### txn-processor
 This stream worker processes incoming transactions and populates two edge collections (`txns_disputed` and `txns_undisputed`) based on the transaction type.
 
-#### Worker Code:
 ```
 @App:name("txn-processor")
 @App:description("This stream worker processes incoming transactions and populates two edge collections (txns_disputed and txns_undisputed)")
@@ -166,7 +164,6 @@ document format:
 }
 ```
 
-#### Worker Code:
 ```
 @App:name("fraud_detection")
 @App:description("This stream worker call fraud_detection query worker (aka restql) to detect fraud")
@@ -252,4 +249,34 @@ Zero in on `culpable merchant`.
 	    // RETURN MERGE(DOCUMENT(merchant), {"mentions": mentions})
 	    LIMIT 1
 	    RETURN {"merchant": merchant}
+```
+
+## Collection Indexes
+
+### Collection: culpable_merchants
+
+```
+ID	Type	Unique	Sparse	Deduplicate	Selectivity Est.	Fields	Name	Action
+0	primary	true	false	n/a	100.00%	_key	primary	
+119657888	ttl	false	true	n/a	96.30%	time	ttl_time_index	
+```
+
+### Collection: txns_disputed
+
+```
+ID	Type	Unique	Sparse	Deduplicate	Selectivity Est.	Fields	Name	Action
+0	primary	true	false	n/a	100.00%	_key	primary	
+2	edge	false	false	n/a	1.30%	_from, _to	edge	
+121060565	ttl	false	true	n/a	33.59%	time	ttl-idx-259200	
+138242033	persistent	false	false	false	33.71%	time	time	
+```
+
+### Collection: txns_undisputed
+
+```
+ID	Type	Unique	Sparse	Deduplicate	Selectivity Est.	Fields	Name	Action
+0	primary	true	false	n/a	100.00%	_key	primary	
+2	edge	false	false	n/a	0.34%	_from, _to	edge	
+121058843	ttl	false	true	n/a	12.47%	time	ttl-idx-259200	
+138410562	persistent	false	false	false	49.93%	_from, time	suspects
 ```
