@@ -172,7 +172,7 @@ document format:
 define stream txns_disputed(_from string, _to string, amount int, status string, time string);
 
 @sink(type='restql-call',restql.name="fraud_detection",sink.id="txn-fraud", ignore.params = "false")
-define stream restqlStream(time string);
+define stream restqlStream(time string, customer string);
 
 -- json or passthrough
 @source(type='restql-call-response',sink.id="txn-fraud", stream="restqlStreamResponse", @map(type="json"))
@@ -181,7 +181,7 @@ define stream restqlStreamResponse(merchant object);
 @store(type='c8db', collection="culpable_merchants", replication.type="global", @map(type='json'))
 define table culpable_merchants(merchant object, time string);
 
-select time
+select time, _from as customer
   from txns_disputed
 insert into restqlStream;
 
@@ -224,7 +224,7 @@ Zero in on `culpable merchant`.
 		FILTER start < t.time AND t.time <= end
 		COLLECT customer = t._from
 		AGGREGATE time = MIN(t.time)
-		SORT (customer == CONCAT("customers/", @customer)) DESC
+		SORT (customer == @customer) DESC
 		RETURN [customer, time]
 	)
 
