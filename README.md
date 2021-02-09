@@ -1,6 +1,7 @@
 # tutorial-fraud-detection
 Tutorial for Realtime Fraud Detection using Graphs, Query Workers & Stream Workers.
 
+![Image](realtime-fraud-detection.png)
 
 ## Setup
 
