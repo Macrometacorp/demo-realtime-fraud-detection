@@ -7,7 +7,7 @@ Tutorial for Realtime Fraud Detection using Graphs, Query Workers & Stream Worke
 
 | **Federation** | **Email** | **Passsword** |
 |------------|----------|--------------|
-| [Global Data Network](https://gdn.paas.macrometa.io/) | ebay@macrometa.io | `xxxxxxxx`| 
+| [Global Data Network](https://gdn.paas.macrometa.io/) | demo-fraud-detection@macrometa.io | `xxxxxxxx`| 
 
 
 ## Sample Dataset
